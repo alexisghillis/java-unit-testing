@@ -1,7 +1,9 @@
 package com.teamtreehouse.vending;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.*;
 
@@ -11,6 +13,9 @@ import static org.junit.Assert.*;
 public class AlphaNumericChooserTest {
     private AlphaNumericChooser chooser;
     private Creditor creditor;
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void setUp() throws Exception {
@@ -38,5 +43,13 @@ public class AlphaNumericChooserTest {
     public void moneyIsBiggerThanFunds() throws Exception, NotEnoughFundsException {
         creditor.addFunds(10);
         creditor.deduct(100);
+    }
+
+    @Test
+    public void constructingLargerThanAlphabetNotAllowed() throws Exception {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Maximum rows supported is 26");
+        new AlphaNumericChooser(27,10);
+
     }
 }
